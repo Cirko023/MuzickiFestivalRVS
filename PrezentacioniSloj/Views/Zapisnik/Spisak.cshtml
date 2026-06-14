@@ -1,0 +1,98 @@
+﻿@model PrezentacioniSloj.PrezentacionaLogika.ViewModels.ZapisnikViewModel
+@{
+    ViewData["Title"] = "Spisak zapisnika";
+    var zapisnici = ViewBag.Zapisnici as List<SlojServisa.KlaseDTO.ZapisnikKoncertaDTO> ?? new();
+}
+
+@if (ViewBag.UkupnoZapisnika != null)
+{
+    <div class="alert alert-dark" role="alert">
+        Ukupan broj zapisnika (stored procedura): <strong>@ViewBag.UkupnoZapisnika</strong>
+    </div>
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-light">Pregled zapisnika o koncertima</h2>
+        <a asp-action="Unos" class="btn btn-success">+ Novi zapisnik</a>
+    </div>
+
+    <div class="card bg-dark border-secondary mb-4">
+        <div class="card-header bg-secondary bg-opacity-25 text-white border-secondary">
+            <strong>Filter pretrage</strong>
+        </div>
+        <div class="card-body">
+            <form method="get" asp-action="Spisak" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label text-white-50">Datum od</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary" name="DatumOd" value="@Model?.DatumOd?.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white-50">Datum do</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary" name="DatumDo" value="@Model?.DatumDo?.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white-50">Izvođač</label>
+                    <select class="form-select bg-dark text-white border-secondary" name="FilterIzvodjacId" asp-items="@Model?.Izvodjaci">
+                        <option value="">Svi izvođači</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="submit" class="btn btn-primary flex-fill">Filtriraj</button>
+                        <a asp-action="Spisak" class="btn btn-outline-light flex-fill">Poništi</a>
+                        <a asp-action="Stampa" asp-route-datumOd="@Model?.DatumOd" asp-route-datumDo="@Model?.DatumDo" asp-route-izvodjacId="@Model?.FilterIzvodjacId" class="btn btn-outline-light flex-fill">Štampa</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!zapisnici.Any())
+    {
+        <div class="alert alert-secondary text-center">
+            Nema zapisnika za prikaz.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-bordered border-secondary align-middle">
+                <thead class="table-secondary text-dark">
+                    <tr>
+                        <th>Datum</th>
+                        <th>Festival</th>
+                        <th>Izvođač</th>
+                        <th>Bina</th>
+                        <th>Popust (%)</th>
+                        <th>Kotizacija (RSD)</th>
+                        <th style="width: 320px;">Akcije</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var z in zapisnici)
+                    {
+                        <tr>
+                            <td>@z.DatumKoncerta.ToString("dd.MM.yyyy")</td>
+                            <td>@z.NazivFestivala</td>
+                            <td>@z.NazivBenda</td>
+                            <td>@z.Bina</td>
+                            <td>@z.PopustProcenat.ToString("0.##")%</td>
+                            <td>@z.KotizacijaSaPopustom.ToString("N0")</td>
+                            <td>
+                                <div class="d-flex gap-1 justify-content-start">
+                                    <a asp-action="Detalji" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Detalji</a>
+                                    <a asp-action="Izmena" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Izmena</a>
+                                    <form asp-action="Obrisi" asp-route-id="@z.ZapisnikID" method="post" onsubmit="return confirm('Obrisati zapisnik?')" style="display:inline;">
+                                        <button type="submit" class="btn btn-secondary btn-sm">Obriši</button>
+                                    </form>
+                                    <a asp-action="Stampa" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Štampa</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -10,4 +10,8 @@
     <Folder Include="PrezentacionaLogika\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SlojServisa\SlojServisa.csproj" />
+  </ItemGroup>
+
 </Project>

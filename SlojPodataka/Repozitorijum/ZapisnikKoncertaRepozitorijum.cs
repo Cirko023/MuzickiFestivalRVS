@@ -1,8 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SlojPodataka.KlasePodataka;
+using SlojPodataka.TehnoloskeKlase;
 
-namespace SlojPodataka.TehnoloskeKlase;
+namespace SlojPodataka.Repozitorijum;
 
 public class ZapisnikKoncertaRepozitorijum
 {

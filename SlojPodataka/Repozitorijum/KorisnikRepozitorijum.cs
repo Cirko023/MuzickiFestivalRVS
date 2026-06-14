@@ -1,7 +1,8 @@
 ﻿using SlojPodataka.KlasePodataka;
 using Microsoft.EntityFrameworkCore;
+using SlojPodataka.TehnoloskeKlase;
 
-namespace SlojPodataka.TehnoloskeKlase;
+namespace SlojPodataka.Repozitorijum;
 
 public class KorisnikRepozitorijum
 {

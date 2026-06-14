@@ -1,0 +1,6 @@
+CREATE OR ALTER PROCEDURE sp_DajUkupanBrojZapisnika
+AS
+BEGIN
+    SELECT COUNT(*) FROM ZapisnikKoncerta;
+END
+GO

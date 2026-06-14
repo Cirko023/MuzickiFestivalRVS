@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Project Path="PrezentacioniSloj/PrezentacioniSloj.csproj" Id="d73da4be-cfa9-46ab-8eee-cee1ac799ff7" />
+  <Project Path="SlojPodataka/SlojPodataka.csproj" Id="63159e0f-da57-4d86-9861-cf7c0bed3292" />
+  <Project Path="SlojPoslovneLogike/SlojPoslovneLogike.csproj" Id="81c4ae17-db90-41d5-ab03-82eaf5e3a7e3" />
+  <Project Path="SlojServisa/SlojServisa.csproj" Id="ef646cd9-687f-47e6-9106-d64963eef839" />
+</Solution>

@@ -1,0 +1,70 @@
+BEGIN TRANSACTION;
+CREATE DATABASE MuzickiFestivalRVS;
+
+USE MuzickiFestivalRVS;
+
+CREATE TABLE [Izvodjac] (
+    [IzvodjacID] int NOT NULL IDENTITY,
+    [NazivBenda] nvarchar(100) NOT NULL,
+    [Grad] nvarchar(50) NOT NULL,
+    [ZanrMuzike] nvarchar(50) NOT NULL,
+    [Kotizacija] decimal(18,2) NOT NULL,
+    [DatumKreiranja] datetime2 NOT NULL,
+    CONSTRAINT [PK_Izvodjac] PRIMARY KEY ([IzvodjacID])
+);
+
+CREATE TABLE [Korisnik] (
+    [KorisnikID] int NOT NULL IDENTITY,
+    [KorisnickoIme] nvarchar(50) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [LozinkaHes] nvarchar(256) NOT NULL,
+    [Salt] nvarchar(64) NOT NULL,
+    [DatumKreiranja] datetime2 NOT NULL,
+    CONSTRAINT [PK_Korisnik] PRIMARY KEY ([KorisnikID])
+);
+
+CREATE TABLE [ZapisnikKoncerta] (
+    [ZapisnikID] int NOT NULL IDENTITY,
+    [NazivFestivala] nvarchar(100) NOT NULL,
+    [Lokacija] nvarchar(100) NOT NULL,
+    [DatumKoncerta] datetime2 NOT NULL,
+    [Bina] nvarchar(50) NOT NULL,
+    [IzvodjacID] int NOT NULL,
+    [VremePocetka] time NOT NULL,
+    [VremeZavrsetka] time NOT NULL,
+    [NaVreme] bit NOT NULL,
+    [RazlogKasnjenja] nvarchar(200) NULL,
+    [TrajanjeNastupaMinuta] int NOT NULL,
+    [BrojPesama] int NOT NULL,
+    [SpecijalniEfekti] bit NOT NULL,
+    [Napomena] nvarchar(500) NULL,
+    [OzvucenjeIspravno] bit NOT NULL,
+    [RasvetaIspravna] bit NOT NULL,
+    [TehnickiProblemi] nvarchar(500) NULL,
+    [OdgovornoLice] nvarchar(100) NOT NULL,
+    [Potpis] nvarchar(100) NOT NULL,
+    [OsnovnaKotizacija] decimal(18,2) NOT NULL,
+    [PopustProcenat] decimal(18,2) NOT NULL,
+    [KotizacijaSaPopustom] decimal(18,2) NOT NULL,
+    [DatumKreiranja] datetime2 NOT NULL,
+    CONSTRAINT [PK_ZapisnikKoncerta] PRIMARY KEY ([ZapisnikID]),
+    CONSTRAINT [FK_ZapisnikKoncerta_Izvodjac_IzvodjacID] FOREIGN KEY ([IzvodjacID]) REFERENCES [Izvodjac] ([IzvodjacID]) ON DELETE NO ACTION
+);
+
+CREATE TABLE [StavkaIzvedenePesme] (
+    [StavkaID] int NOT NULL IDENTITY,
+    [ZapisnikID] int NOT NULL,
+    [RedniBroj] int NOT NULL,
+    [NazivPesme] nvarchar(150) NOT NULL,
+    [TrajanjeMinute] int NOT NULL,
+    [DatumKreiranja] datetime2 NOT NULL,
+    CONSTRAINT [PK_StavkaIzvedenePesme] PRIMARY KEY ([StavkaID]),
+    CONSTRAINT [FK_StavkaIzvedenePesme_ZapisnikKoncerta_ZapisnikID] FOREIGN KEY ([ZapisnikID]) REFERENCES [ZapisnikKoncerta] ([ZapisnikID]) ON DELETE CASCADE
+);
+
+CREATE INDEX [StavkaIzvedenePesme_ZapisnikID] ON [StavkaIzvedenePesme] ([ZapisnikID]);
+
+CREATE INDEX [ZapisnikKoncerta_IzvodjacID] ON [ZapisnikKoncerta] ([IzvodjacID]);
+
+COMMIT;
+GO

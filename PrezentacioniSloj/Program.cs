@@ -4,8 +4,8 @@ builder.Services.AddControllersWithViews()
     .AddRazorOptions(opcije =>
     {
         opcije.ViewLocationFormats.Clear();
-        opcije.ViewLocationFormats.Add("/KorisnickiInterfejs/Views/{1}/{0}.cshtml");
-        opcije.ViewLocationFormats.Add("/KorisnickiInterfejs/Views/Shared/{0}.cshtml");
+        opcije.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
+        opcije.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
     });
 
 builder.Services.AddHttpClient("FestivalApi", client =>

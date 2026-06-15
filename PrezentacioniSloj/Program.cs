@@ -1,29 +1,36 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(opcije =>
+    {
+        opcije.ViewLocationFormats.Clear();
+        opcije.ViewLocationFormats.Add("/KorisnickiInterfejs/Views/{1}/{0}.cshtml");
+        opcije.ViewLocationFormats.Add("/KorisnickiInterfejs/Views/Shared/{0}.cshtml");
+    });
+
+builder.Services.AddHttpClient("FestivalApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5072/");
+});
+
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Nalog}/{action=Prijava}/{id?}");
 
 app.Run();

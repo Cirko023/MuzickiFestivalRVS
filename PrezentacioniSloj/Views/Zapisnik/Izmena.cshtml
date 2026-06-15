@@ -1,0 +1,189 @@
+﻿@model PrezentacioniSloj.PrezentacionaLogika.ViewModels.ZapisnikViewModel
+@{
+    ViewData["Title"] = "Izmena zapisnika";
+}
+
+<h2 class="mb-4">Izmena zapisnika o koncertu</h2>
+
+<form asp-action="Izmena" asp-route-id="@Model.ZapisnikID" method="post" id="forma-zapisnik">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary bg-opacity-25">Podaci o festivalu</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="NazivFestivala" class="form-label">Naziv festivala</label>
+                    <input asp-for="NazivFestivala" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Lokacija" class="form-label">Lokacija</label>
+                    <input asp-for="Lokacija" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="DatumKoncerta" class="form-label">Datum</label>
+                    <input asp-for="DatumKoncerta" type="date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Bina" class="form-label">Bina</label>
+                    <input asp-for="Bina" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="IzvodjacID" class="form-label">Naziv benda</label>
+                    <select asp-for="IzvodjacID" class="form-select" asp-items="Model.Izvodjaci"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary bg-opacity-25">Evidencija nastupa i tehnički uslovi</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label asp-for="VremePocetka" class="form-label">Vreme početka</label>
+                    <input asp-for="VremePocetka" type="time" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="VremeZavrsetka" class="form-label">Vreme završetka</label>
+                    <input asp-for="VremeZavrsetka" type="time" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mt-4">
+                        <input asp-for="NaVreme" class="form-check-input" type="checkbox" id="naVreme" />
+                        <label class="form-check-label" for="naVreme">Na vreme</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="RazlogKasnjenja" class="form-label">Razlog kašnjenja</label>
+                    <input asp-for="RazlogKasnjenja" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="TrajanjeNastupaMinuta" class="form-label">Trajanje (min)</label>
+                    <input asp-for="TrajanjeNastupaMinuta" type="number" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="BrojPesama" class="form-label">Broj pesama</label>
+                    <input asp-for="BrojPesama" type="number" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mt-4">
+                        <input asp-for="SpecijalniEfekti" class="form-check-input" type="checkbox" id="specijalniEfekti" />
+                        <label class="form-check-label" for="specijalniEfekti">Specijalni efekti</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mt-4">
+                        <input asp-for="OzvucenjeIspravno" class="form-check-input" type="checkbox" id="ozvucenje" />
+                        <label class="form-check-label" for="ozvucenje">Ozvučenje ispravno</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mt-4">
+                        <input asp-for="RasvetaIspravna" class="form-check-input" type="checkbox" id="rasveta" />
+                        <label class="form-check-label" for="rasveta">Rasveta ispravna</label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Napomena" class="form-label">Napomena</label>
+                    <textarea asp-for="Napomena" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="TehnickiProblemi" class="form-label">Tehnički problemi</label>
+                    <textarea asp-for="TehnickiProblemi" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary bg-opacity-25 d-flex justify-content-between align-items-center">
+            <span>Izvedene pesme</span>
+            <button type="button" class="btn btn-sm btn-success" id="dugme-dodaj-stavku">+ Dodaj pesmu</button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-dark table-bordered" id="tabela-stavki">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Redni broj</th>
+                            <th>Naziv pesme</th>
+                            <th>Trajanje (min)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="telo-tabele">
+                        @for (int i = 0; i < Model.Stavke.Count; i++)
+                        {
+                            <tr>
+                                <td><input name="Stavke[@i].RedniBroj" type="number" value="@Model.Stavke[i].RedniBroj" class="form-control redni-broj" style="min-width:80px;" /></td>
+                                <td><input name="Stavke[@i].NazivPesme" type="text" value="@Model.Stavke[i].NazivPesme" class="form-control naziv-pesme" style="min-width:150px;" /></td>
+                                <td><input name="Stavke[@i].TrajanjeMinute" type="number" value="@Model.Stavke[i].TrajanjeMinute" class="form-control" style="min-width:80px;" /></td>
+                                <td><button type="button" class="btn btn-sm btn-danger dugme-obrisi-stavku">Ukloni</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary bg-opacity-25">Potpis</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="OdgovornoLice" class="form-label">Odgovorno lice</label>
+                    <input asp-for="OdgovornoLice" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Potpis" class="form-label">Potpis</label>
+                    <input asp-for="Potpis" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
+        <a asp-action="Spisak" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var brojStavki = @Model.Stavke.Count;
+        document.getElementById("dugme-dodaj-stavku").addEventListener("click", function () {
+            var telo = document.getElementById("telo-tabele");
+            var red = document.createElement("tr");
+            brojStavki++;
+            red.innerHTML = `
+                <td><input name="Stavke[${brojStavki - 1}].RedniBroj" type="number" value="${brojStavki}" class="form-control redni-broj" style="min-width:80px;" /></td>
+                <td><input name="Stavke[${brojStavki - 1}].NazivPesme" type="text" class="form-control naziv-pesme" style="min-width:150px;" /></td>
+                <td><input name="Stavke[${brojStavki - 1}].TrajanjeMinute" type="number" class="form-control" style="min-width:80px;" /></td>
+                <td><button type="button" class="btn btn-sm btn-danger dugme-obrisi-stavku">Ukloni</button></td>`;
+            telo.appendChild(red);
+            azurirajIndekse();
+        });
+        document.getElementById("telo-tabele").addEventListener("click", function (e) {
+            if (e.target.classList.contains("dugme-obrisi-stavku")) {
+                e.target.closest("tr").remove();
+                azurirajIndekse();
+            }
+        });
+        function azurirajIndekse() {
+            var redovi = document.querySelectorAll("#telo-tabele tr");
+            redovi.forEach(function (red, i) {
+                red.querySelectorAll("input").forEach(function (el) {
+                    el.name = el.name.replace(/\[\d+\]/, `[${i}]`);
+                });
+                var rb = red.querySelector(".redni-broj");
+                if (rb && !rb.value) rb.value = i + 1;
+            });
+            brojStavki = redovi.length;
+        }
+    </script>
+}

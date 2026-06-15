@@ -1,0 +1,116 @@
+﻿@model List<SlojServisa.KlaseDTO.ZapisnikKoncertaDTO>
+@{
+    ViewData["Title"] = "Štampa";
+    bool jedanZapisnik = ViewBag.JedanZapisnik ?? false;
+}
+
+<div id="oblast-stampe">
+    @if (jedanZapisnik && Model.Count == 1)
+    {
+        var z = Model.First();
+        <div class="p-4">
+            <h4 class="fw-bold text-center text-uppercase">Zapisnik o realizaciji koncerta na muzičkom festivalu</h4>
+            <hr />
+
+            <table class="table table-borderless mb-0">
+                <tr><td class="fw-bold" style="width:180px">Naziv festivala:</td><td>@z.NazivFestivala</td></tr>
+                <tr><td class="fw-bold">Lokacija:</td><td>@z.Lokacija</td></tr>
+                <tr><td class="fw-bold">Datum:</td><td>@z.DatumKoncerta.ToString("dd.MM.yyyy")</td></tr>
+                <tr><td class="fw-bold">Bina:</td><td>@z.Bina</td></tr>
+            </table>
+
+            <hr />
+            <h6 class="fw-bold text-uppercase">1. Podaci o izvođaču</h6>
+            <p><strong>Naziv benda:</strong> @z.NazivBenda</p>
+            <p><strong>Vreme početka:</strong> @z.VremePocetka | <strong>Vreme završetka:</strong> @z.VremeZavrsetka</p>
+
+            <hr />
+            <h6 class="fw-bold text-uppercase">2. Evidencija izvođenja nastupa</h6>
+            <p>Početak nastupa: @(z.NaVreme ? "[X] Na vreme" : "[X] Sa kašnjenjem")</p>
+            @if (!z.NaVreme && !string.IsNullOrEmpty(z.RazlogKasnjenja))
+            {
+                <p><strong>Razlog kašnjenja:</strong> @z.RazlogKasnjenja</p>
+            }
+            <p><strong>Trajanje nastupa:</strong> @z.TrajanjeNastupaMinuta min | <strong>Broj pesama:</strong> @z.BrojPesama</p>
+            <p>Specijalni efekti: @(z.SpecijalniEfekti ? "[X] Da" : "[ ] Ne")</p>
+            @if (!string.IsNullOrEmpty(z.Napomena))
+            {
+                <p><strong>Napomena:</strong> @z.Napomena</p>
+            }
+
+            <hr />
+            <h6 class="fw-bold text-uppercase">3. Tehnički uslovi</h6>
+            <p>Ozvučenje: @(z.OzvucenjeIspravno ? "[X] Ispravno" : "[X] Neispravno")</p>
+            <p>Rasveta: @(z.RasvetaIspravna ? "[X] Ispravna" : "[X] Neispravna")</p>
+            @if (!string.IsNullOrEmpty(z.TehnickiProblemi))
+            {
+                <p><strong>Problemi:</strong> @z.TehnickiProblemi</p>
+            }
+
+            @if (z.PopustProcenat > 0)
+            {
+                <div class="alert alert-success mt-3">
+                    Poslovno pravilo primenjeno: popust @z.PopustProcenat% na kotizaciju.
+                    Osnovna kotizacija: @z.OsnovnaKotizacija.ToString("N0") RSD →
+                    <strong>@z.KotizacijaSaPopustom.ToString("N0") RSD</strong>
+                </div>
+            }
+
+            <hr />
+            <h6 class="fw-bold text-uppercase">Izvedene pesme</h6>
+            <table class="table table-bordered">
+                <thead><tr><th>Redni broj</th><th>Naziv pesme</th><th>Trajanje (min)</th></tr></thead>
+                <tbody>
+                    @foreach (var s in z.Stavke.OrderBy(x => x.RedniBroj))
+                    {
+                        <tr><td>@s.RedniBroj</td><td>@s.NazivPesme</td><td>@s.TrajanjeMinute</td></tr>
+                    }
+                </tbody>
+            </table>
+
+            <hr />
+            <p><strong>Odgovorno lice:</strong> @z.OdgovornoLice</p>
+            <p><strong>Potpis:</strong> @z.Potpis</p>
+        </div>
+    }
+    else
+    {
+        <h3 class="mb-4 text-center">Spisak zapisnika o koncertima</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Datum</th>
+                    <th>Festival</th>
+                    <th>Izvođač</th>
+                    <th>Bina</th>
+                    <th>Popust</th>
+                    <th>Kotizacija</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int rbr = 1;
+                }
+                @foreach (var z in Model)
+                {
+                    <tr>
+                        <td>@rbr</td>
+                        <td>@z.DatumKoncerta.ToString("dd.MM.yyyy")</td>
+                        <td>@z.NazivFestivala</td>
+                        <td>@z.NazivBenda</td>
+                        <td>@z.Bina</td>
+                        <td>@(z.PopustProcenat > 0 ? $"{z.PopustProcenat}%" : "—")</td>
+                        <td>@z.KotizacijaSaPopustom.ToString("N0") RSD</td>
+                    </tr>
+                    rbr++;
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<div class="d-flex gap-2 mt-3 d-print-none">
+    <button onclick="window.print()" class="btn btn-primary">Štampaj</button>
+    <a asp-action="Spisak" class="btn btn-secondary">Nazad</a>
+</div>

@@ -1,0 +1,75 @@
+﻿@model SlojServisa.KlaseDTO.ZapisnikKoncertaDTO
+@{
+    ViewData["Title"] = "Detalji zapisnika";
+}
+
+<h2 class="mb-4">Detalji zapisnika #@Model.ZapisnikID</h2>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary bg-opacity-25">Festival i izvođač</div>
+    <div class="card-body">
+        <p><strong>Festival:</strong> @Model.NazivFestivala</p>
+        <p><strong>Lokacija:</strong> @Model.Lokacija | <strong>Datum:</strong> @Model.DatumKoncerta.ToString("dd.MM.yyyy") | <strong>Bina:</strong> @Model.Bina</p>
+        <p><strong>Izvođač:</strong> @Model.NazivBenda</p>
+        <p><strong>Vreme:</strong> @Model.VremePocetka – @Model.VremeZavrsetka</p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary bg-opacity-25">Evidencija nastupa</div>
+    <div class="card-body">
+        <p><strong>Početak:</strong> @(Model.NaVreme ? "Na vreme" : $"Sa kašnjenjem — {Model.RazlogKasnjenja}")</p>
+        <p><strong>Trajanje:</strong> @Model.TrajanjeNastupaMinuta min | <strong>Broj pesama:</strong> @Model.BrojPesama</p>
+        <p><strong>Specijalni efekti:</strong> @(Model.SpecijalniEfekti ? "Da" : "Ne")</p>
+        @if (!string.IsNullOrEmpty(Model.Napomena))
+        {
+            <p><strong>Napomena:</strong> @Model.Napomena</p>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary bg-opacity-25">Tehnički uslovi i kotizacija</div>
+    <div class="card-body">
+        <p><strong>Ozvučenje:</strong> @(Model.OzvucenjeIspravno ? "Ispravno" : "Neispravno")</p>
+        <p><strong>Rasveta:</strong> @(Model.RasvetaIspravna ? "Ispravna" : "Neispravna")</p>
+        @if (!string.IsNullOrEmpty(Model.TehnickiProblemi))
+        {
+            <p><strong>Problemi:</strong> @Model.TehnickiProblemi</p>
+        }
+        <hr />
+        <p><strong>Osnovna kotizacija:</strong> @Model.OsnovnaKotizacija.ToString("N0") RSD</p>
+        @if (Model.PopustProcenat > 0)
+        {
+            <p class="text-success"><strong>Odobren popust:</strong> @Model.PopustProcenat% (oprema u redu)</p>
+        }
+        <p><strong>Kotizacija sa popustom:</strong> @Model.KotizacijaSaPopustom.ToString("N0") RSD</p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary bg-opacity-25">Izvedene pesme</div>
+    <div class="card-body">
+        <table class="table table-dark table-bordered">
+            <thead class="table-secondary"><tr><th>#</th><th>Naziv pesme</th><th>Trajanje (min)</th></tr></thead>
+            <tbody>
+                @foreach (var s in Model.Stavke.OrderBy(x => x.RedniBroj))
+                {
+                    <tr>
+                        <td>@s.RedniBroj</td>
+                        <td>@s.NazivPesme</td>
+                        <td>@s.TrajanjeMinute</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<p><strong>Odgovorno lice:</strong> @Model.OdgovornoLice | <strong>Potpis:</strong> @Model.Potpis</p>
+
+<div class="d-flex gap-2 mt-3">
+    <a asp-action="Izmena" asp-route-id="@Model.ZapisnikID" class="btn btn-warning">Izmena</a>
+    <a asp-action="Stampa" asp-route-id="@Model.ZapisnikID" class="btn btn-secondary">Štampa</a>
+    <a asp-action="Spisak" class="btn btn-secondary">Nazad</a>
+</div>

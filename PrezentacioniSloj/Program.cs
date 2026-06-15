@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddHttpClient("FestivalApi", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5072/");
+    client.BaseAddress = new Uri(builder.Configuration["FestivalApi"]);
 });
 
 builder.Services.AddSession();

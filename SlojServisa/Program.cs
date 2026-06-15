@@ -8,9 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<FestivalDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PodrazumevanaKonekcija")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StringKonekcije")));
 
-Konekcija.NizKonekcije = builder.Configuration.GetConnectionString("PodrazumevanaKonekcija")!;
+Konekcija.NizKonekcije = builder.Configuration.GetConnectionString("StringKonekcije")!;
 
 builder.Services.AddScoped<ZapisnikKoncertaRepozitorijum>();
 builder.Services.AddScoped<KorisnikRepozitorijum>();

@@ -1,26 +1,34 @@
 ﻿using System.Net.Http.Json;
 
-namespace SlojPoslovneLogike.Ogranicenja;
-
-public class CitacPravila
+namespace SlojPoslovneLogike.Ogranicenja
 {
-    private readonly HttpClient _httpClient;
-    private const string UrlServisa = "http://localhost:5072/api/PravilaRest";
-
-    public CitacPravila(HttpClient httpClient)
+    public class CitacPravila
     {
-        _httpClient = httpClient;
+        private readonly HttpClient _httpClient;
+        private const string UrlServisa = "http://localhost:5231/api/PravilaRest";
+
+        public CitacPravila(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
+        public async Task<decimal> DohvatiProcenatPopusta()
+        {
+            try
+            {
+                var pravila = await _httpClient.GetFromJsonAsync<PravilaModel>(UrlServisa);
+                return pravila?.ProcenatPopusta ?? 10;
+            }
+            catch
+            {
+                return 10;
+            }
+        }
     }
 
-    public async Task<decimal> DohvatiProcenatPopusta()
+    public class PravilaModel
     {
-        var pravila = await _httpClient.GetFromJsonAsync<PravilaModel>(UrlServisa);
-        return pravila?.ProcenatPopusta ?? 10;
+        public decimal ProcenatPopusta { get; set; }
+        public string Opis { get; set; } = string.Empty;
     }
-}
-
-public class PravilaModel
-{
-    public decimal ProcenatPopusta { get; set; }
-    public string Opis { get; set; } = string.Empty;
 }

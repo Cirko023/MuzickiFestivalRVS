@@ -66,5 +66,18 @@ CREATE INDEX [StavkaIzvedenePesme_ZapisnikID] ON [StavkaIzvedenePesme] ([Zapisni
 
 CREATE INDEX [ZapisnikKoncerta_IzvodjacID] ON [ZapisnikKoncerta] ([IzvodjacID]);
 
+INSERT INTO Izvodjac (NazivBenda, Grad, ZanrMuzike, Kotizacija, DatumKreiranja) VALUES
+('Opeth', 'Beograd', 'Progresivni Metal', 50000, GETDATE()),
+('Malevolence', 'Novi Sad', 'Metalkor', 35000, GETDATE()),
+('Ensiferum', 'Niš', 'Folk Metal', 40000, GETDATE()),
+('Fleshgod Apocalypse', 'Subotica', 'Simfonijski Metal', 45000, GETDATE()),
+('At The Gates', 'Zrenjanin', 'Melodicni Death Metal', 30000, GETDATE());
+
+DECLARE @Salt NVARCHAR(64) = CONVERT(NVARCHAR(64), NEWID());
+DECLARE @Lozinka NVARCHAR(256) = HASHBYTES('SHA2_256', CAST('admin' + @Salt AS NVARCHAR(MAX)));
+
+INSERT INTO Korisnik (KorisnickoIme, Email, LozinkaHes, Salt, DatumKreiranja)
+VALUES ('admin', 'admin@festival.rs', CONVERT(NVARCHAR(256), @Lozinka, 2), @Salt, GETDATE());
+
 COMMIT;
 GO

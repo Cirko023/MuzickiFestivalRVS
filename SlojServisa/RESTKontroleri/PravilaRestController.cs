@@ -12,7 +12,7 @@ public class PravilaRestController : ControllerBase
     {
         try
         {
-            var putanja = Path.Combine(AppContext.BaseDirectory, "Ogranicenja", "pravila_popusta.xml");
+            var putanja = Path.Combine(AppContext.BaseDirectory, "Ogranicenja", "PravilaPopusta.xml");
             var xml = XDocument.Load(putanja);
 
             return Ok(new

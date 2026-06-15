@@ -5,7 +5,7 @@ namespace SlojServisa.KlaseMapiranja;
 
 public class ZapisnikMapper
 {
-    public ZapisnikKoncertaDTO UDTO(ZapisnikKoncerta entitet)
+    public ZapisnikKoncertaDTO UObjekatZaPrenos(ZapisnikKoncerta entitet)
     {
         return new ZapisnikKoncertaDTO
         {
@@ -42,8 +42,8 @@ public class ZapisnikMapper
         };
     }
 
-    public List<ZapisnikKoncertaDTO> UListuDTO(List<ZapisnikKoncerta> entiteti)
-        => entiteti.Select(UDTO).ToList();
+    public List<ZapisnikKoncertaDTO> UListuObjekataZaPrenos(List<ZapisnikKoncerta> entiteti)
+        => entiteti.Select(UObjekatZaPrenos).ToList();
 
     public ZapisnikKoncerta UEntitet(ZapisnikKoncertaDTO dto)
     {

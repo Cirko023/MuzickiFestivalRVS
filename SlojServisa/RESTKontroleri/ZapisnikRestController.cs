@@ -30,7 +30,7 @@ public class ZapisnikRestController : ControllerBase
     [HttpGet]
     public ActionResult<List<ZapisnikKoncertaDTO>> DohvatiSve()
     {
-        return Ok(_mapper.UListuDTO(_repozitorijum.DohvatiSve()));
+        return Ok(_mapper.UListuObjekataZaPrenos(_repozitorijum.DohvatiSve()));
     }
 
     [HttpGet("statistika")]
@@ -52,7 +52,7 @@ public class ZapisnikRestController : ControllerBase
         var zapisnik = _repozitorijum.DohvatiPoId(id);
         if (zapisnik == null)
             return NotFound($"Zapisnik sa ID-em {id} nije pronađen.");
-        return Ok(_mapper.UDTO(zapisnik));
+        return Ok(_mapper.UObjekatZaPrenos(zapisnik));
     }
 
     [HttpPost]
@@ -122,6 +122,6 @@ public class ZapisnikRestController : ControllerBase
         [FromQuery] int? izvodjacId)
     {
         var zapisnici = _repozitorijum.Filtriraj(datumOd, datumDo, izvodjacId);
-        return Ok(_mapper.UListuDTO(zapisnici));
+        return Ok(_mapper.UListuObjekataZaPrenos(zapisnici));
     }
 }

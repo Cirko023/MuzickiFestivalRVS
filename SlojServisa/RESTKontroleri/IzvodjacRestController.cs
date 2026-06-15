@@ -24,7 +24,7 @@ public class IzvodjacRestController : ControllerBase
     [HttpGet]
     public ActionResult<List<IzvodjacDTO>> DohvatiSve()
     {
-        return Ok(_mapper.UListuDTO(_repozitorijum.DohvatiSve()));
+        return Ok(_mapper.UListuObjekataZaPrenos(_repozitorijum.DohvatiSve()));
     }
 
     [HttpGet("{id}")]
@@ -33,7 +33,7 @@ public class IzvodjacRestController : ControllerBase
         var izvodjac = _repozitorijum.DohvatiPoId(id);
         if (izvodjac == null)
             return NotFound($"Izvođač sa ID-em {id} nije pronađen.");
-        return Ok(_mapper.UDTO(izvodjac));
+        return Ok(_mapper.UObjekatZaPrenos(izvodjac));
     }
 
     [HttpGet("broj")]

@@ -5,7 +5,7 @@ namespace SlojServisa.KlaseMapiranja;
 
 public class IzvodjacMapper
 {
-    public IzvodjacDTO UDTO(Izvodjac entitet) => new()
+    public IzvodjacDTO UObjekatZaPrenos(Izvodjac entitet) => new()
     {
         IzvodjacID = entitet.IzvodjacID,
         NazivBenda = entitet.NazivBenda,
@@ -14,5 +14,5 @@ public class IzvodjacMapper
         Kotizacija = entitet.Kotizacija
     };
 
-    public List<IzvodjacDTO> UListuDTO(List<Izvodjac> entiteti) => entiteti.Select(UDTO).ToList();
+    public List<IzvodjacDTO> UListuObjekataZaPrenos(List<Izvodjac> entiteti) => entiteti.Select(UObjekatZaPrenos).ToList();
 }

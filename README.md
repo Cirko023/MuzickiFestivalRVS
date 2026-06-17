@@ -19,17 +19,17 @@ Servis	SlojServisa	REST API (CRUD, filtriranje, statistika)
 Poslovna logika	SlojPoslovneLogike	Poslovno pravilo o popustu, validacije
 Podaci	SlojPodataka	Repository pattern, EF Core, DBUtils, stored procedure
 Pokretanje
-1. Kreiraj bazu podataka
+1. Kreirati bazu podataka
 Pokreni SQL skriptu iz fajla baza podataka.txt na svom SQL Server-u.
 
-2. Podesi konekcioni string
+2. Podesiti konekcioni string
 U appsettings.json (u PrezentacioniSloj i SlojServisa) postavi:
 
 json
 "ConnectionStrings": {
   "PodrazumevanaKonekcija": "Server=localhost\\SQLEXPRESS;Database=MuzickiFestivalRVS;Trusted_Connection=True;TrustServerCertificate=True;"
 }
-3. Pokreni oba projekta
+3. Pokrenuti oba projekta
 Podesiti Multiple startup projects u Visual Studio:
 
 SlojServisa → Start

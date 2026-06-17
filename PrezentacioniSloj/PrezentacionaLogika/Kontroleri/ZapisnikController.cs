@@ -269,37 +269,58 @@ public class ZapisnikController : Controller
         return RedirectToAction("Spisak");
     }
 
-    public async Task<IActionResult> Stampa(int? id, ZapisnikViewModel filter)
+    public async Task<IActionResult> Stampa(int? id, DateTime? datumOd, DateTime? datumDo, int? izvodjacId)
+{
+    if (HttpContext.Session.GetString("KorisnickoIme") == null)
+        return RedirectToAction("Prijava", "Nalog");
+
+    var klijent = KreirajKlijenta();
+
+    if (id.HasValue)
     {
-        if (HttpContext.Session.GetString("KorisnickoIme") == null)
-            return RedirectToAction("Prijava", "Nalog");
+        var odgovor = await klijent.GetAsync($"api/ZapisnikRest/{id}");
+        if (!odgovor.IsSuccessStatusCode)
+            return NotFound();
 
-        var klijent = KreirajKlijenta();
+        var json = await odgovor.Content.ReadAsStringAsync();
+        var zapisnik = JsonSerializer.Deserialize<ZapisnikKoncertaDTO>(json,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        if (id.HasValue)
-        {
-            var odgovor = await klijent.GetAsync($"api/ZapisnikRest/{id}");
-            var json = await odgovor.Content.ReadAsStringAsync();
-            var zapisnik = JsonSerializer.Deserialize<ZapisnikKoncertaDTO>(json,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            ViewBag.JedanZapisnik = true;
-            return View(new List<ZapisnikKoncertaDTO> { zapisnik! });
-        }
-
-        var url = "api/ZapisnikRest/filter?";
-        if (filter.DatumOd.HasValue)
-            url += $"datumOd={filter.DatumOd:yyyy-MM-dd}&";
-        if (filter.DatumDo.HasValue)
-            url += $"datumDo={filter.DatumDo:yyyy-MM-dd}&";
-        if (filter.FilterIzvodjacId.HasValue)
-            url += $"izvodjacId={filter.FilterIzvodjacId}";
-
-        var filterOdgovor = await klijent.GetAsync(url);
-        var filterJson = await filterOdgovor.Content.ReadAsStringAsync();
-        var zapisnici = JsonSerializer.Deserialize<List<ZapisnikKoncertaDTO>>(filterJson,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<ZapisnikKoncertaDTO>();
-
-        ViewBag.JedanZapisnik = false;
-        return View(zapisnici);
+        ViewBag.JedanZapisnik = true;
+        return View(new List<ZapisnikKoncertaDTO> { zapisnik! });
     }
+
+    var url = "api/ZapisnikRest/filter?";
+    var imaParametar = false;
+
+    if (datumOd.HasValue)
+    {
+        url += $"datumOd={datumOd:yyyy-MM-dd}&";
+        imaParametar = true;
+    }
+    if (datumDo.HasValue)
+    {
+        url += $"datumDo={datumDo:yyyy-MM-dd}&";
+        imaParametar = true;
+    }
+    if (izvodjacId.HasValue && izvodjacId.Value > 0)
+    {
+        url += $"izvodjacId={izvodjacId}&";
+        imaParametar = true;
+    }
+
+    if (!imaParametar)
+        url = "api/ZapisnikRest/filter";
+    else
+        url = url.TrimEnd('&');
+
+    var odgovorFilter = await klijent.GetAsync(url);
+    var jsonFilter = await odgovorFilter.Content.ReadAsStringAsync();
+
+    var zapisnici = JsonSerializer.Deserialize<List<ZapisnikKoncertaDTO>>(jsonFilter,
+        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<ZapisnikKoncertaDTO>();
+
+    ViewBag.JedanZapisnik = false;
+    return View(zapisnici);
+}
 }

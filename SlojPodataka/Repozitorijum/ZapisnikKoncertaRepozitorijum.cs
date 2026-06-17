@@ -16,8 +16,7 @@ public class ZapisnikKoncertaRepozitorijum
 
     public List<ZapisnikKoncerta> DohvatiSve()
     {
-        return _kontekst.Zapisnici
-            .AsNoTracking()
+        return _kontekst.Zapisnici.AsNoTracking()
             .Include(z => z.Izvodjac)
             .Include(z => z.Stavke)
             .OrderByDescending(z => z.DatumKoncerta)

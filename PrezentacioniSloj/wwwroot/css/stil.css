@@ -9,6 +9,11 @@
     color: #e0e0e0;
 }
 
+.btn-success {
+    background-color: #4169E1 !important;
+    border-color: #4169E1 !important;
+}
+
 .card-header {
     background-color: #2c2c3a !important;
     border-bottom-color: #3a3a4a !important;
@@ -51,17 +56,20 @@ label, .form-label, .control-label {
     color: #e0e0e0;
 }
 
-.table-bordered, .table-bordered td, .table-bordered th {
-    border-color: #3a3a4a !important;
-}
-
 .table-dark {
-    background-color: #1e1e2f !important;
+    background-color: #1e1e2f;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-    .table-dark td, .table-dark th {
-        border-color: #3a3a4a;
-    }
+.table-dark td, .table-dark th {
+     border-bottom: 1px solid #3a3a4a;
+     padding: 0.75rem 1rem;
+}
+
+.table-dark tr:last-child td {
+     border-bottom: none;
+}
 
 .table-secondary {
     background-color: #6c757d !important;

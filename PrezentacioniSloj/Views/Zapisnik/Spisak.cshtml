@@ -23,26 +23,24 @@
         </div>
         <div class="card-body">
             <form method="get" asp-action="Spisak" class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label text-white-50">Datum od</label>
                     <input type="date" class="form-control bg-dark text-white border-secondary" name="DatumOd" value="@Model?.DatumOd?.ToString("yyyy-MM-dd")">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label text-white-50">Datum do</label>
                     <input type="date" class="form-control bg-dark text-white border-secondary" name="DatumDo" value="@Model?.DatumDo?.ToString("yyyy-MM-dd")">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label text-white-50">Izvođač</label>
                     <select class="form-select bg-dark text-white border-secondary" name="FilterIzvodjacId" asp-items="@Model?.Izvodjaci">
                         <option value="">Svi izvođači</option>
                     </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="d-flex gap-2 w-100">
-                        <button type="submit" class="btn btn-primary flex-fill">Filtriraj</button>
-                        <a asp-action="Spisak" class="btn btn-outline-light flex-fill">Poništi</a>
-                        <a asp-action="Stampa" asp-route-datumOd="@Model?.DatumOd" asp-route-datumDo="@Model?.DatumDo" asp-route-izvodjacId="@Model?.FilterIzvodjacId" class="btn btn-outline-light flex-fill">Štampa</a>
-                    </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">Filtriraj</button>
+                    <a asp-action="Spisak" class="btn btn-outline-light flex-fill">Poništi</a>
+                    <a asp-action="Stampa" asp-route-datumOd="@Model?.DatumOd" asp-route-datumDo="@Model?.DatumDo" asp-route-izvodjacId="@Model?.FilterIzvodjacId" class="btn btn-outline-light flex-fill">Štampa</a>
                 </div>
             </form>
         </div>
@@ -80,13 +78,16 @@
                             <td>@z.PopustProcenat.ToString("0.##")%</td>
                             <td>@z.KotizacijaSaPopustom.ToString("N0")</td>
                             <td>
-                                <div class="d-flex gap-1 justify-content-start">
-                                    <a asp-action="Detalji" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Detalji</a>
-                                    <a asp-action="Izmena" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Izmena</a>
-                                    <form asp-action="Obrisi" asp-route-id="@z.ZapisnikID" method="post" onsubmit="return confirm('Obrisati zapisnik?')" style="display:inline;">
-                                        <button type="submit" class="btn btn-secondary btn-sm">Obriši</button>
-                                    </form>
-                                    <a asp-action="Stampa" asp-route-id="@z.ZapisnikID" class="btn btn-secondary btn-sm">Štampa</a>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        Akcije
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" asp-action="Detalji" asp-route-id="@z.ZapisnikID">Detalji</a></li>
+                                        <li><a class="dropdown-item" asp-action="Izmena" asp-route-id="@z.ZapisnikID">Izmena</a></li>
+                                        <li><form asp-action="Obrisi" asp-route-id="@z.ZapisnikID" method="post" onsubmit="return confirm('Obrisati?')"><button class="dropdown-item text-danger">Obriši</button></form></li>
+                                        <li><a class="dropdown-item" asp-action="Stampa" asp-route-id="@z.ZapisnikID">Štampa</a></li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>

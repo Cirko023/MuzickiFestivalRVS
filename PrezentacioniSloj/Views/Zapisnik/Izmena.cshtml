@@ -42,11 +42,11 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <label asp-for="VremePocetka" class="form-label">Vreme početka</label>
-                    <input asp-for="VremePocetka" type="time" class="form-control" />
+                    <input asp-for="VremePocetka" type="time" class="form-control" id="vreme-pocetka"/>
                 </div>
                 <div class="col-md-3">
                     <label asp-for="VremeZavrsetka" class="form-label">Vreme završetka</label>
-                    <input asp-for="VremeZavrsetka" type="time" class="form-control" />
+                    <input asp-for="VremeZavrsetka" type="time" class="form-control" id="vreme-zavrsetka"/>
                 </div>
                 <div class="col-md-3">
                     <div class="form-check mt-4">
@@ -134,14 +134,15 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label asp-for="OdgovornoLice" class="form-label">Odgovorno lice</label>
-                    <input asp-for="OdgovornoLice" class="form-control" />
+                    <input asp-for="OdgovornoLice" class="form-control" id="odgovorno-lice"/>
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Potpis" class="form-label">Potpis</label>
-                    <input asp-for="Potpis" class="form-control" />
+                    <input asp-for="Potpis" class="form-control" id="potpis"/>
                 </div>
             </div>
         </div>
+        <div id="poruka-validacije" class="text-danger"></div>
     </div>
 
     <div class="d-flex gap-2 mt-3">
@@ -154,6 +155,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/validacije.js"></script>
     <script>
         var brojStavki = @Model.Stavke.Count;
         document.getElementById("dugme-dodaj-stavku").addEventListener("click", function () {
